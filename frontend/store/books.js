@@ -1,10 +1,10 @@
 import { create } from "zustand";
-
+import API_URL from "./api";
 export const useBookStore = create((set) => ({
   books: [],
   setBooks: (books) => set({ books }),
   fetchBooks: async () => {
-    const res = await fetch("/api/books");
+    const res = await fetch(`${API_URL}/api/books`);
     const data = await res.json();
     set({ books: data.data });
   },
@@ -13,7 +13,7 @@ export const useBookStore = create((set) => ({
       return { success: false, message: "Please fill in all fields" };
     }
 
-    const res = await fetch("/api/books", {
+    const res = await fetch(`${API_URL}/api/books`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const useBookStore = create((set) => ({
     if (!editBook.title || !editBook.author || !editBook.status) {
       return { success: false, message: "Please fill in all fields" };
     }
-    const res = await fetch(`/api/books/${id}`, {
+    const res = await fetch(`${API_URL}/api/books/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const useBookStore = create((set) => ({
     return { success: true, message: "Successfully updated" };
   },
   deleteBook: async (id) => {
-    const res = await fetch(`/api/books/${id}`, {
+    const res = await fetch(`${API_URL}/api/books/${id}`, {
       method: "DELETE",
     });
     const data = await res.json();
