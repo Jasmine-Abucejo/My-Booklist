@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import API_URL from "./api";
+import API_URL from "../src/api";
 export const useBookStore = create((set) => ({
   books: [],
   setBooks: (books) => set({ books }),
