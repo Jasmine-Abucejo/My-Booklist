@@ -5,7 +5,7 @@ const Card = ({ book, handleEdit, handleDelete }) => {
   return (
     <div
       key={book._id}
-      className="border-2 rounded inline-block p-2 mx-2 mt-2 bg-cyan-800"
+      className="border-2 rounded inline-block p-2 mx-2 mt-2 bg-cyan-800 max-w-full lg:w-auto whitespace-normal lg:whitespace-nowrap"
     >
       <p className="text-2xl">{book.title}</p>
       <p className="text-lg">{book.author}</p>

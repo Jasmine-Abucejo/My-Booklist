@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="w-1/20 min-h-1/2 bg-cyan-500 grid grid-rows-2 gap-4 p-4 items-center justify-center">
-      <Link to="/new" className="border-b-2">
+    <div className="lg:w-1/20 lg:min-h-1/2 bg-cyan-500 flex lg:grid lg:grid-rows-2 gap-4 p-4 items-center justify-center">
+      <Link to="/new" className="lg:border-b-2 flex-1">
         <FaCirclePlus className="w-10 h-auto" />
       </Link>
-      <Link to="/" className="border-b-2">
+      <Link to="/" className="lg:border-b-2 ">
         <RiBookShelfFill className="w-10 h-auto" />
       </Link>
     </div>

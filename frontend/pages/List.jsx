@@ -1,11 +1,16 @@
 import { useBookStore } from "../store/books";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import toast from "react-hot-toast";
 import Card from "./Card";
 
 const List = () => {
-  const { books, fetchBooks, editBook, deleteBook } = useBookStore();
+  // const { books, fetchBooks, editBook, deleteBook } = useBookStore();
+  const refs = [useRef(null), useRef(null), useRef(null)];
+  const books = useBookStore((state) => state.books);
+  const fetchBooks = useBookStore((state) => state.fetchBooks);
+  const editBook = useBookStore((state) => state.editBook);
+  const deleteBook = useBookStore((state) => state.deleteBook);
   useEffect(() => {
     fetchBooks();
   }, []);
@@ -58,6 +63,15 @@ const List = () => {
       toast.error(message);
     }
   };
+  const scrollLeft = (index) => {
+    const scrollRef = refs[index];
+    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+  };
+
+  const scrollRight = (index) => {
+    const scrollRef = refs[index];
+    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  };
   return (
     <div className="relative">
       <div
@@ -65,58 +79,122 @@ const List = () => {
           updateModal || deleteModal
             ? "opacity-30 pointer-events-none"
             : "opacity-100"
-        } flex flex-col justify-center items-center  text-center h-dvh`}
+        } flex flex-col lg:justify-center items-center  text-center h-dvh`}
       >
-        <p className="text-lg font-bold mb-8">MY BOOKLIST</p>
+        <p className="text-lg font-bold mb-4 mt-4">MY BOOKLIST</p>
         <div className="grid grid-rows-3 border-2 size-4/5 bg-cyan-950">
-          <div className="border-b-2 w-full max-w-full overflow-x-auto ">
-            <p className="border-b-2 sticky left-0 bg-cyan-500">
+          <div className="border-b-2 w-full max-w-full overflow-x-auto group relative">
+            <p className="border-b-2 sticky left-0 top-0 bg-cyan-500">
               Currently Reading
             </p>
-            <div className="flex  whitespace-nowrap ">
-              {books
-                .filter((book) => book.status === "Currently Reading")
-                .map((book) => (
-                  <Card
-                    key={book._id}
-                    book={book}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                  />
-                ))}
+            <button
+              onClick={() => scrollLeft(0)}
+              className="text-2xl absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/50 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100"
+            >
+              ❮❮❮❮
+            </button>
+            <div
+              className="flex flex-col lg:flex-row whitespace-nowrap lg:overflow-hidden"
+              ref={refs[0]}
+            >
+              {Array.isArray(books) && books.length > 0 ? (
+                books
+                  .filter((book) => book?.status === "Currently Reading")
+                  .map((book) =>
+                    book?._id ? (
+                      <Card
+                        key={book._id}
+                        book={book}
+                        handleEdit={handleEdit}
+                        handleDelete={handleDelete}
+                      />
+                    ) : null
+                  )
+              ) : (
+                <p className="text-gray-500 italic">No books available.</p>
+              )}
             </div>
+            <button
+              onClick={() => scrollRight(0)}
+              className="text-2xl absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/50 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100"
+            >
+              ❯❯❯❯
+            </button>
           </div>
-          <div className="border-b-2 w-full max-w-full overflow-x-auto">
-            <div className="border-b-2 sticky left-0 bg-cyan-500">
+          <div className="border-b-2 w-full max-w-full overflow-x-auto relative group">
+            <div className="border-b-2 sticky left-0 top-0 bg-cyan-500">
               Finished Reading
             </div>
-
-            <div className="flex  whitespace-nowrap ">
-              {books
-                .filter((book) => book.status === "Finished Reading")
-                .map((book) => (
-                  <Card
-                    key={book._id}
-                    book={book}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                  />
-                ))}
+            <button
+              onClick={() => scrollLeft(1)}
+              className="text-2xl absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/50 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100"
+            >
+              ❮❮❮❮
+            </button>
+            <div
+              className="flex flex-col lg:flex-row whitespace-nowrap lg:overflow-hidden"
+              ref={refs[1]}
+            >
+              {Array.isArray(books) && books.length > 0 ? (
+                books
+                  .filter((book) => book?.status === "Finished Reading")
+                  .map((book) =>
+                    book?._id ? (
+                      <Card
+                        key={book._id}
+                        book={book}
+                        handleEdit={handleEdit}
+                        handleDelete={handleDelete}
+                      />
+                    ) : null
+                  )
+              ) : (
+                <p className="text-gray-500 italic">No books available.</p>
+              )}
             </div>
+            <button
+              onClick={() => scrollRight(1)}
+              className="text-2xl absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/50 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100"
+            >
+              ❯❯❯❯
+            </button>
           </div>
-          <div className="w-full max-w-full overflow-x-auto ">
-            <p className="border-b-2 sticky left-0 bg-cyan-500">To Be Read</p>
-            <div className="flex  whitespace-nowrap ">
-              {books
-                .filter((book) => book.status === "To Be Read")
-                .map((book) => (
-                  <Card
-                    key={book._id}
-                    book={book}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                  />
-                ))}
+          <div className="w-full max-w-full overflow-x-auto relative group">
+            <p className="border-b-2 sticky left-0 top-0 bg-cyan-500">
+              To Be Read
+            </p>
+            <button
+              onClick={() => scrollLeft(2)}
+              className="text-2xl absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/50 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100"
+            >
+              ❮❮❮❮
+            </button>
+            <div
+              className="flex flex-col lg:flex-row whitespace-nowrap lg:overflow-hidden"
+              ref={refs[2]}
+            >
+              {Array.isArray(books) && books.length > 0 ? (
+                books
+                  .filter((book) => book?.status === "To Be Read")
+                  .map((book) =>
+                    book?._id ? (
+                      <Card
+                        key={book._id}
+                        book={book}
+                        handleEdit={handleEdit}
+                        handleDelete={handleDelete}
+                      />
+                    ) : null
+                  )
+              ) : (
+                <p className="text-gray-500 italic">No books available.</p>
+              )}
+              <button
+                onClick={() => scrollRight(2)}
+                className="text-2xl absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/50 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100"
+              >
+                ❯❯❯❯
+              </button>
             </div>
           </div>
         </div>

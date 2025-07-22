@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <div className=" flex h-screen bg-cyan-800">
+    <div className=" flex flex-col lg:flex-row lg:h-screen bg-cyan-800">
       <Navbar />
       <div className="flex-1">
         <Routes>

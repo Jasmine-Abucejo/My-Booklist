@@ -8,7 +8,7 @@ const CreatePage = () => {
     author: "",
     status: "",
   });
-  const { addBook } = useBookStore();
+  const addBook = useBookStore((state) => state.addBook);
   const addNew = async () => {
     const { success, message } = await addBook(newBook);
     setNewBook({ title: "", author: "", status: "" });
@@ -19,9 +19,9 @@ const CreatePage = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center h-lvh">
+    <div className="flex flex-col items-center lg:justify-center h-lvh">
       <p className="text-lg font-bold mb-8 mt-8">ADD BOOK</p>
-      <div className="grid grid-cols-2 gap-2 border-2 p-4 bg-cyan-950">
+      <div className="grid grid-cols-2 gap-2 border-2 p-4 bg-cyan-950 relative">
         <label className="text-cyan-500">Title: </label>
         <input
           type="text"
@@ -40,7 +40,7 @@ const CreatePage = () => {
         <select
           name="status"
           id="status"
-          className="border-2 bg-cyan-800"
+          className="border-2 bg-cyan-800 "
           value={newBook.status}
           onChange={(e) => setNewBook({ ...newBook, status: e.target.value })}
         >
